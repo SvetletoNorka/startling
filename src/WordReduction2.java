@@ -67,7 +67,7 @@ public class WordReduction2 {
 
             long duration = end - start;
 
-            System.out.println("Time execution: " + (duration / 1_000_000.0) + " ms");
+            System.out.println("Time execution: " + (duration / 1_000_000_000.0) + " seconds");
 
             // Print valid words grouped by length
             for (int len = 1; len <= 9; len++) {
