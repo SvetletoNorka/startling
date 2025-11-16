@@ -5,7 +5,7 @@ import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class WordReduction {
+public class WordReductionChainBuilder {
 
     private static final String DICT_URL =
             "https://raw.githubusercontent.com/nikiiv/JavaCodingTestOne/master/scrabble-words.txt";
@@ -36,10 +36,12 @@ public class WordReduction {
 
             long duration = end - start;
 
-            System.out.println("Time execution: " + (duration / 1_000_000.0) + " ms");
+            System.out.println("Time execution: " + (duration / 1_000_000_000.0) + " seconds");
 
             // Print chains
             printChains(chains);
+
+            System.out.println("Total valid 9-letter chains: " + chains.size());
 
 
         } catch (Exception e) {

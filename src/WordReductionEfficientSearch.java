@@ -5,7 +5,7 @@ import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class WordReduction2 {
+public class WordReductionEfficientSearch {
 
     private static final String DICT_URL =
             "https://raw.githubusercontent.com/nikiiv/JavaCodingTestOne/master/scrabble-words.txt";
