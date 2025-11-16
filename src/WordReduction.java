@@ -1,4 +1,6 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -24,19 +26,20 @@ public class WordReduction {
                 }
             }
 
+            long start = System.nanoTime();
+
             // 4) For each 9-letter word, try to build a full reduction chain
-            for (String word : words9) {
+            List<List<String>> chains = returnValidChains(words9, dictSet);
 
-                List<String> chain = buildValidChain(word, dictSet);
+            long end = System.nanoTime();
 
-                // Print only if a full valid chain was found
-                if (!chain.isEmpty()) {
-                    for (String w : chain) {
-                        System.out.println(w);
-                    }
-                    System.out.println(); // separator between chains
-                }
-            }
+            long duration = end - start;
+
+            System.out.println("Time execution: " + (duration / 1_000_000.0) + " ms");
+
+            // Print chains
+            printChains(chains);
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -49,6 +52,7 @@ public class WordReduction {
         chain.add(word);
 
         String current = word;
+        StringBuilder sb = new StringBuilder();
 
         // Continue until the word becomes a single letter
         while (current.length() > 1) {
@@ -57,9 +61,9 @@ public class WordReduction {
             // Try removing each letter using StringBuilder
             for (int i = 0; i < current.length(); i++) {
 
-                StringBuilder sb = new StringBuilder(current);
+                sb.setLength(0);
+                sb.append(current);
                 sb.deleteCharAt(i); // remove one character
-
                 String shorter = sb.toString();
 
                 // "A" and "I" are valid standalone English words
@@ -78,6 +82,21 @@ public class WordReduction {
         }
 
         return chain;
+    }
+
+    private static List<List<String>> returnValidChains(List<String> words9, Set<String> dictSet) {
+        return words9.parallelStream()
+                .map(w -> buildValidChain(w, dictSet))
+                .filter(chain -> !chain.isEmpty())
+                .collect(Collectors.toList());
+    }
+
+    private static void printChains(List<List<String>> chains) {
+        for (List<String> w : chains) {
+            System.out.println(w);
+        }
+        // separator between chains
+        System.out.println();
     }
 
     // Loads words from a URL
