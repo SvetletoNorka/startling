@@ -69,8 +69,16 @@ public class WordReduction2 {
 
             System.out.println("Time execution: " + (duration / 1_000_000.0) + " ms");
 
-            System.out.println("Valid words: " + validWordsMap);
-            System.out.println("Total valid words: " + validWordsMap.size());
+            // Print valid words grouped by length
+            for (int len = 1; len <= 9; len++) {
+                Set<String> group = validWordsMap.getOrDefault(len, Collections.emptySet());
+                System.out.println(len + "-letter words: " + group);
+            }
+
+            // Print only the count of 9-letter words
+            int countL9 = validWordsMap.getOrDefault(9, Collections.emptySet()).size();
+            System.out.println("Total valid 9-letter words: " + countL9);
+
 
         } catch (Exception e) {
             e.printStackTrace();
