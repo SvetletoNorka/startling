@@ -11,6 +11,9 @@ public class WordReduction {
             "https://raw.githubusercontent.com/nikiiv/JavaCodingTestOne/master/scrabble-words.txt";
 
     public static void main(String[] args) {
+
+        long start = System.nanoTime();
+
         try {
             // 1) Load all words from the URL
             List<String> dict = loadAllWords(DICT_URL);
@@ -25,8 +28,6 @@ public class WordReduction {
                     words9.add(w);
                 }
             }
-
-            long start = System.nanoTime();
 
             // 4) For each 9-letter word, try to build a full reduction chain
             List<List<String>> chains = returnValidChains(words9, dictSet);
@@ -50,7 +51,6 @@ public class WordReduction {
     private static List<String> buildValidChain(String word, Set<String> dict) {
         List<String> chain = new ArrayList<>();
         chain.add(word);
-
         String current = word;
         StringBuilder sb = new StringBuilder();
 
