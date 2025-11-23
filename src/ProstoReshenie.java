@@ -1,6 +1,9 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class ProstoReshenie {
@@ -40,18 +43,18 @@ public class ProstoReshenie {
 
         filteredWords.removeAll(filteredWords9);
 
-
         HashSet<String> fineFiltering = finefiltering(filteredWords9, filteredWords);
-
 
     }
 
     private static HashSet<String> finefiltering(HashSet<String> filteredWords9, HashSet<String> filteredWords) {
         HashSet<String> fineFiltering = new HashSet<>();
 
-        while(!filteredWords9.isEmpty()) {
+        while (!filteredWords9.isEmpty()) {
             String word = filteredWords9.iterator().next();
             filteredWords9.remove(word);
+
+            int count = 8;
 
             for (int i = 0; i < word.length(); i++) {
 
@@ -60,8 +63,11 @@ public class ProstoReshenie {
                 String newWord = sb.toString();
 
                 if (filteredWords.contains(newWord)) {
+                    count--;
+                }
+
+                if (count == 0) {
                     fineFiltering.add(word);
-                    filteredWords.remove(newWord);
                     break;
                 }
             }
@@ -70,15 +76,15 @@ public class ProstoReshenie {
         return fineFiltering;
     }
 
-        // Load words from URL
-        private static List<String> loadAllWords (String url) throws IOException {
-            URL wordsURL = new URL(url);
+    // Load words from URL
+    private static List<String> loadAllWords(String url) throws IOException {
+        URL wordsURL = new URL(url);
 
-            try (BufferedReader br = new BufferedReader(
-                    new InputStreamReader(wordsURL.openConnection().getInputStream()))) {
+        try (BufferedReader br = new BufferedReader(
+                new InputStreamReader(wordsURL.openConnection().getInputStream()))) {
 
-                return br.lines().skip(2).collect(Collectors.toList());
-            }
+            return br.lines().skip(2).collect(Collectors.toList());
         }
+    }
 
 }
