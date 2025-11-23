@@ -54,26 +54,58 @@ public class ProstoReshenie {
             String word = filteredWords9.iterator().next();
             filteredWords9.remove(word);
 
-            int count = 8;
+            int count = countMatches(word, filteredWords);
 
-            for (int i = 0; i < word.length(); i++) {
-
-                StringBuilder sb = new StringBuilder(word);
-                sb.deleteCharAt(i);
-                String newWord = sb.toString();
-
-                if (filteredWords.contains(newWord)) {
-                    count--;
-                }
-
-                if (count == 0) {
-                    fineFiltering.add(word);
-                    break;
-                }
+            if (count == 8) {
+                fineFiltering.add(word);
             }
         }
 
         return fineFiltering;
+    }
+
+    public static int countMatches(String word, HashSet<String> dictionary) {
+
+        // Брояч на намерените съвпадения
+        int matches = 0;
+
+        // Работна променлива, която ще "смаляваме"
+        String current = word;
+
+        // Продължаваме докато не стигнем 8 съвпадения или думата стане празна
+        while (current.length() > 0 && matches < 8) {
+
+            boolean foundMatchThisRound = false;
+
+            // Обхождаме буквите една по една
+            for (int i = 0; i < current.length(); i++) {
+
+                // Махаме една буква от позиция i
+                StringBuilder sb = new StringBuilder(current);
+                sb.deleteCharAt(i);
+                String newWord = sb.toString();
+
+                // Проверка дали я има в HashSet
+                if (dictionary.contains(newWord)) {
+
+                    // Увеличаваме броя на съвпаденията
+                    matches++;
+
+                    // Продължаваме с тази нова дума
+                    current = newWord;
+
+                    foundMatchThisRound = true;
+                    break; // излизаме, за да продължим от новата дума
+                }
+            }
+
+            // Ако в този цикъл не намерихме нито едно ново съвпадение → прекратяваме
+            if (!foundMatchThisRound) {
+                break;
+            }
+        }
+
+        return matches;
     }
 
     // Load words from URL
