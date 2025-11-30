@@ -11,7 +11,7 @@ public class Main {
     }
 }
 
-//Input:
+//Input
 //AddPool DeepWaterPool SeaDream
 //AddPool DeepWaterPool SeaDream
 //AddPool ShallowWaterPool OceanCurrent
@@ -30,9 +30,9 @@ public class Main {
 //PlayWithDolphins SeaDream
 //PlayWithDolphins BlueAbyss
 //GetStatistics
-//Exit
+//        Exit
 
-//Output:
+//OutPut
 //Successfully added DeepWaterPool SeaDream.
 //Pool already exists.
 //Successfully added ShallowWaterPool OceanCurrent.
