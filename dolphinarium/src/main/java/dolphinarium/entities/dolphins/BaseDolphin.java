@@ -4,8 +4,8 @@ import dolphinarium.common.ExceptionMessages;
 import dolphinarium.entities.foods.Food;
 
 public abstract class BaseDolphin implements Dolphin {
-    String name;
-    int energy;
+   private String name;
+   private int energy;
 
     public BaseDolphin(String name, int energy) {
         this.name = name;
