@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public abstract class BasePool implements Pool {
-    String name;
-    int capacity;
+    private String name;
+    private int capacity;
 
-    Collection<Food> foods;
-    Collection<Dolphin> dolphins;
+    private Collection<Food> foods;
+    private Collection<Dolphin> dolphins;
 
     public BasePool(String name, int capacity) {
         this.name = name;
@@ -67,12 +67,12 @@ public abstract class BasePool implements Pool {
     }
 
     @Override
-    public void removeDolphin(Dolphin dolphin){
+    public void removeDolphin(Dolphin dolphin) {
         this.dolphins.remove(dolphin);
     }
 
     @Override
-    public  void addFood(Food food){
+    public void addFood(Food food) {
         this.foods.add(food);
     }
 }
