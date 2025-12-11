@@ -19,31 +19,34 @@ public class ProstoReshenie {
         long start = System.nanoTime();
 
         // HashSet - > hold unique elements and have O(1) for contains()
-        HashSet<String> words = new HashSet<>();
         HashSet<String> filteredWords = new HashSet<>();
         HashSet<String> filteredWords9 = new HashSet<>();
 
-        words.addAll(dict);
-
         // Filtering words that contain A or I and length<=9
-        for (String w : words) {
+        for (String w : dict) {
             int len = w.length();
             if (len <= 9 && (w.contains("A") || w.contains("I"))) {
                 filteredWords.add(w);
+                if (len == 9) {
+                    filteredWords9.add(w);
+                }
             }
         }
-
-        // Next filtration
-        for (String n : filteredWords) {
-            int len9 = n.length();
-            if (len9 == 9) {
-                filteredWords9.add(n);
-            }
-        }
-
+        
+        // Remove 9-letter words from filteredWords (we only need them for intermediate steps)
         filteredWords.removeAll(filteredWords9);
+        
+        // Add "A" and "I" as valid single-letter words
+        filteredWords.add("A");
+        filteredWords.add("I");
 
         HashSet<String> fineFiltering = finefiltering(filteredWords9, filteredWords);
+        
+        long end = System.nanoTime();
+        long duration = end - start;
+        
+        System.out.println("Time execution: " + (duration / 1_000_000_000.0) + " seconds");
+        System.out.println("Total valid 9-letter words: " + fineFiltering.size());
 
     }
 
@@ -56,6 +59,8 @@ public class ProstoReshenie {
 
             int count = countMatches(word, filteredWords);
 
+            // Check if we found 8 matches (9 -> 8 -> 7 -> 6 -> 5 -> 4 -> 3 -> 2 -> 1)
+            // and verify the final word is "A" or "I"
             if (count == 8) {
                 fineFiltering.add(word);
             }
@@ -65,47 +70,40 @@ public class ProstoReshenie {
     }
 
     public static int countMatches(String word, HashSet<String> dictionary) {
-
-        // Брояч на намерените съвпадения
-        int matches = 0;
-
-        // Работна променлива, която ще "смаляваме"
-        String current = word;
-
-        // Продължаваме докато не стигнем 8 съвпадения или думата стане празна
-        while (current.length() > 0 && matches < 8) {
-
-            boolean foundMatchThisRound = false;
-
-            // Обхождаме буквите една по една
-            for (int i = 0; i < current.length(); i++) {
-
-                // Махаме една буква от позиция i
-                StringBuilder sb = new StringBuilder(current);
-                sb.deleteCharAt(i);
-                String newWord = sb.toString();
-
-                // Проверка дали я има в HashSet
-                if (dictionary.contains(newWord)) {
-
-                    // Увеличаваме броя на съвпаденията
-                    matches++;
-
-                    // Продължаваме с тази нова дума
-                    current = newWord;
-
-                    foundMatchThisRound = true;
-                    break; // излизаме, за да продължим от новата дума
+        // Use recursive method to check if we can reduce from word to "A" or "I"
+        if (canReduceToSingleLetter(word, dictionary, 0)) {
+            return 8; // Successfully reduced through 8 steps
+        }
+        return 0; // Not a valid chain
+    }
+    
+    private static boolean canReduceToSingleLetter(String word, HashSet<String> dictionary, int depth) {
+        // Base case: if we reached "A" or "I" and made exactly 8 steps
+        if (word.length() == 1) {
+            return (word.equals("A") || word.equals("I")) && depth == 8;
+        }
+        
+        // If we've already made 8 steps but word is not single letter, invalid
+        if (depth >= 8) {
+            return false;
+        }
+        
+        // Try removing each letter and check if resulting word is valid
+        for (int i = 0; i < word.length(); i++) {
+            StringBuilder sb = new StringBuilder(word);
+            sb.deleteCharAt(i);
+            String newWord = sb.toString();
+            
+            // Check if the new word is in dictionary or is "A" or "I"
+            if (dictionary.contains(newWord) || newWord.equals("A") || newWord.equals("I")) {
+                // Recursively try to reduce from this new word
+                if (canReduceToSingleLetter(newWord, dictionary, depth + 1)) {
+                    return true;
                 }
             }
-
-            // Ако в този цикъл не намерихме нито едно ново съвпадение → прекратяваме
-            if (!foundMatchThisRound) {
-                break;
-            }
         }
-
-        return matches;
+        
+        return false; // No valid path found
     }
 
     // Load words from URL
