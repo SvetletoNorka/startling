@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ProstoReshenie {
+public class Startling {
 
     private static final String DICT_URL =
             "https://raw.githubusercontent.com/nikiiv/JavaCodingTestOne/master/scrabble-words.txt";
@@ -77,6 +77,7 @@ public class ProstoReshenie {
         return 0; // Not a valid chain
     }
     
+    // Recursive method to check if we can reduce from word to "A" or "I"
     private static boolean canReduceToSingleLetter(String word, HashSet<String> dictionary, int depth) {
         // Base case: if we reached "A" or "I" and made exactly 8 steps
         if (word.length() == 1) {
