@@ -1,0 +1,22 @@
+# User-specific files
+*.user
+
+# Build results
+bin/
+obj/
+x64/
+
+# Java
+target/
+.mvn/
+*.iml
+
+# Visual Studio
+.vs/
+
+# JetBrains
+.idea/
+cmake-build-debug/
+
+# JavaScript
+node_modules/
